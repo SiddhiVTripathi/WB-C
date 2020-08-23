@@ -67,9 +67,9 @@ def train(args):
     with tf.device('/device:GPU:0'):
 
         sess.run(tf.compat.v1.global_variables_initializer())
-        face_photo_dir = 'dataset/photo_face'
+        face_photo_dir = 'dataset/face_photo'
         face_photo_list = utils.load_image_list(face_photo_dir)
-        scenery_photo_dir = 'dataset/photo_scenery'
+        scenery_photo_dir = 'dataset/scenery_photo'
         scenery_photo_list = utils.load_image_list(scenery_photo_dir)
 
 
