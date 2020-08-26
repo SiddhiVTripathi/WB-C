@@ -8,7 +8,7 @@ by Xinrui Wang and Jinze yu
 
 import tensorflow as tf
 import tf_slim as slim
-
+import wandb
 import utils
 import os
 import numpy as np
@@ -18,7 +18,7 @@ from tqdm import tqdm
 
 
 os.environ["CUDA_VISIBLE_DEVICES"]="0"
-
+wandb.init(project="white-box-cartoonization", sync_tensorboard=True)
 
 def arg_parser():
     parser = argparse.ArgumentParser()
@@ -84,6 +84,7 @@ def train(args):
 
             if np.mod(total_iter+1, 50) == 0:
 
+                wandb.log({"r_loss":r_loss,"iteration":total_iter})
                 print('pretrain, iter: {}, recon_loss: {}'.format(total_iter, r_loss))
                 if np.mod(total_iter+1, 500 ) == 0:
                     saver.save(sess, args.save_dir+'save_models/model', 
