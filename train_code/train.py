@@ -176,7 +176,7 @@ def train(args):
                        "training g_loss":g_loss,
                         "training r_loss":r_loss,
                         "training iteration":total_iter)
-                        
+
                 if np.mod(total_iter+1, 500 ) == 0:
                     saver.save(sess, args.save_dir+'/saved_models/model', 
                                write_meta_graph=False, global_step=total_iter)
@@ -194,14 +194,14 @@ def train(args):
                                                                 input_superpixel: photo_scenery,
                                                                 input_cartoon: cartoon_scenery})
 
-                    wandb.log("petrain example":[wandb.Image(utils.write_batch_image(result_face, args.save_dir+'/images', 
-                                            str(total_iter)+'_face_result.jpg', 4), caption="str(total_iter)+'_face_result")]
-                    wandb.log("petrain example":[wandb.Image(utils.write_batch_image(photo_face, args.save_dir+'/images', 
-                                            str(total_iter)+'_face_photo.jpg', 4), caption="str(total_iter)+'_face_result")]
-                    wandb.log("petrain example":[wandb.Image(utils.write_batch_image(result_scenery, args.save_dir+'/images', 
-                                            str(total_iter)+'_scenery_result.jpg', 4), caption="str(total_iter)+'_face_result")]
-                    wandb.log("petrain example":[wandb.Image(utils.write_batch_image(photo_scenery, args.save_dir+'/images', 
-                                            str(total_iter)+'_scenery_photo.jpg', 4), caption="str(total_iter)+'_face_result")]
+                    wandb.log({"train example":[wandb.Image(utils.write_batch_image(result_face, args.save_dir+'/images', 
+                                            str(total_iter)+'_face_result.jpg', 4), caption="str(total_iter)+'_face_result")]})
+                    wandb.log({"train example":[wandb.Image(utils.write_batch_image(photo_face, args.save_dir+'/images', 
+                                            str(total_iter)+'_face_photo.jpg', 4), caption="str(total_iter)+'_face_result")]})
+                    wandb.log({"train example":[wandb.Image(utils.write_batch_image(result_scenery, args.save_dir+'/images', 
+                                            str(total_iter)+'_scenery_result.jpg', 4), caption="str(total_iter)+'_face_result")]})
+                    wandb.log({"train example":[wandb.Image(utils.write_batch_image(photo_scenery, args.save_dir+'/images', 
+                                            str(total_iter)+'_scenery_photo.jpg', 4), caption="str(total_iter)+'_face_result")]})
 
 
             
