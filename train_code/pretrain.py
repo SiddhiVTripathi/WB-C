@@ -100,13 +100,13 @@ def train(args):
                     result_scenery = sess.run(output, feed_dict={input_photo: photo_scenery})
 
                     wandb.log({"pretrain example":[wandb.Image(utils.write_batch_image(result_face, args.save_dir+'/images', 
-                                            str(total_iter)+'_face_result.jpg', 4), caption="str(total_iter)+'_face_result")]})
+                                            str(total_iter)+'_face_result.jpg', 4), caption=str(total_iter)+'_face_result')]})
                     wandb.log({"pretrain example":[wandb.Image(utils.write_batch_image(photo_face, args.save_dir+'/images', 
-                                            str(total_iter)+'_face_photo.jpg', 4), caption="str(total_iter)+'_face_result")]})
+                                            str(total_iter)+'_face_photo.jpg', 4), caption=str(total_iter)+'_face_result')]})
                     wandb.log({"pretrain example":[wandb.Image(utils.write_batch_image(result_scenery, args.save_dir+'/images', 
-                                            str(total_iter)+'_scenery_result.jpg', 4), caption="str(total_iter)+'_face_result")]})
+                                            str(total_iter)+'_scenery_result.jpg', 4), caption=str(total_iter)+'_face_result')]})
                     wandb.log({"pretrain example":[wandb.Image(utils.write_batch_image(photo_scenery, args.save_dir+'/images', 
-                                            str(total_iter)+'_scenery_photo.jpg', 4), caption="str(total_iter)+'_face_result")]})
+                                            str(total_iter)+'_scenery_photo.jpg', 4), caption=str(total_iter)+'_face_result')]})
 
         
     wandb.tensorflow.log(tf.summary.merge_all())
