@@ -194,14 +194,14 @@ def train(args):
                                                                 input_superpixel: photo_scenery,
                                                                 input_cartoon: cartoon_scenery})
 
-                    wandb.log({"train example":[wandb.Image(utils.write_batch_image(result_face, args.save_dir+'/images', 
+                    wandb.log({"train result face":[wandb.Image(utils.write_batch_image(result_face, args.save_dir+'/images', 
                                             str(total_iter)+'_face_result.jpg', 4), caption=str(total_iter)+'_face_result')]})
-                    wandb.log({"train example":[wandb.Image(utils.write_batch_image(photo_face, args.save_dir+'/images', 
-                                            str(total_iter)+'_face_photo.jpg', 4), caption=str(total_iter)+'_face_result')]})
-                    wandb.log({"train example":[wandb.Image(utils.write_batch_image(result_scenery, args.save_dir+'/images', 
-                                            str(total_iter)+'_scenery_result.jpg', 4), caption=str(total_iter)+'_face_result')]})
-                    wandb.log({"train example":[wandb.Image(utils.write_batch_image(photo_scenery, args.save_dir+'/images', 
-                                            str(total_iter)+'_scenery_photo.jpg', 4), caption=str(total_iter)+'_face_result')]})
+                    wandb.log({"train example face":[wandb.Image(utils.write_batch_image(photo_face, args.save_dir+'/images', 
+                                            str(total_iter)+'_face_photo.jpg', 4), caption=str(total_iter)+'_face_photo')]})
+                    wandb.log({"train result scenery":[wandb.Image(utils.write_batch_image(result_scenery, args.save_dir+'/images', 
+                                            str(total_iter)+'_scenery_result.jpg', 4), caption=str(total_iter)+'_scenery_result')]})
+                    wandb.log({"train example scenery":[wandb.Image(utils.write_batch_image(photo_scenery, args.save_dir+'/images', 
+                                            str(total_iter)+'_scenery_photo.jpg', 4), caption=str(total_iter)+'_scenery_photo')]})
 
 
             
