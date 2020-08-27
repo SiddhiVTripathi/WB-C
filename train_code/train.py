@@ -120,14 +120,14 @@ def train(args):
         sess.run(tf.compat.v1.global_variables_initializer())
         saver.restore(sess, tf.train.latest_checkpoint('pretrain/saved_models'))
 
-        face_photo_dir = 'dataset/photo_face'
+        face_photo_dir = 'dataset/face_photo'
         face_photo_list = utils.load_image_list(face_photo_dir)
-        scenery_photo_dir = 'dataset/photo_scenery'
+        scenery_photo_dir = 'dataset/scenery_photo'
         scenery_photo_list = utils.load_image_list(scenery_photo_dir)
 
-        face_cartoon_dir = 'dataset/cartoon_face'
+        face_cartoon_dir = 'dataset/face_cartoon'
         face_cartoon_list = utils.load_image_list(face_cartoon_dir)
-        scenery_cartoon_dir = 'dataset/cartoon_scenery'
+        scenery_cartoon_dir = 'dataset/scenery_cartoon'
         scenery_cartoon_list = utils.load_image_list(scenery_cartoon_dir)
 
         for total_iter in tqdm(range(args.total_iter)):
@@ -172,10 +172,10 @@ def train(args):
 
                 print('Iter: {}, d_loss: {}, g_loss: {}, recon_loss: {}'.\
                         format(total_iter, d_loss, g_loss, r_loss))
-             wandb.log("training d_loss":d_loss,
+             wandb.log({"training d_loss":d_loss,
                        "training g_loss":g_loss,
                         "training r_loss":r_loss,
-                        "training iteration":total_iter)
+                        "training iteration":total_iter})
 
                 if np.mod(total_iter+1, 500 ) == 0:
                     saver.save(sess, args.save_dir+'/saved_models/model', 
