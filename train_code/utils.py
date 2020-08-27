@@ -163,6 +163,7 @@ def write_batch_image(image, save_dir, name, n):
         fused_image[i] = np.hstack(fused_image[i])
     fused_image = np.vstack(fused_image)
     cv2.imwrite(fused_dir, fused_image.astype(np.uint8))
+    return fused_image.astype(np.uint8)
 
 
 if __name__ == '__main__':

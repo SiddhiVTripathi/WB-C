@@ -7,7 +7,7 @@ by Xinrui Wang and Jinze yu
 
 import tensorflow as tf
 import tf_slim as slim
-
+import wandb
 import utils
 import os
 import numpy as np
@@ -19,7 +19,7 @@ from tqdm import tqdm
 from guided_filter import guided_filter
 
 os.environ["CUDA_VISIBLE_DEVICES"]="0"
-
+wandb.init(project="white-box-cartoonization", sync_tensorboard=True)
 
 def arg_parser():
     parser = argparse.ArgumentParser()
@@ -172,6 +172,11 @@ def train(args):
 
                 print('Iter: {}, d_loss: {}, g_loss: {}, recon_loss: {}'.\
                         format(total_iter, d_loss, g_loss, r_loss))
+             wandb.log("training d_loss":d_loss,
+                       "training g_loss":g_loss,
+                        "training r_loss":r_loss,
+                        "training iteration":total_iter)
+                        
                 if np.mod(total_iter+1, 500 ) == 0:
                     saver.save(sess, args.save_dir+'/saved_models/model', 
                                write_meta_graph=False, global_step=total_iter)
@@ -189,15 +194,15 @@ def train(args):
                                                                 input_superpixel: photo_scenery,
                                                                 input_cartoon: cartoon_scenery})
 
-                    utils.write_batch_image(result_face, args.save_dir+'/images', 
-                                            str(total_iter)+'_face_result.jpg', 4)
-                    utils.write_batch_image(photo_face, args.save_dir+'/images', 
-                                            str(total_iter)+'_face_photo.jpg', 4)
+                    wandb.log("petrain example":[wandb.Image(utils.write_batch_image(result_face, args.save_dir+'/images', 
+                                            str(total_iter)+'_face_result.jpg', 4), caption="str(total_iter)+'_face_result")]
+                    wandb.log("petrain example":[wandb.Image(utils.write_batch_image(photo_face, args.save_dir+'/images', 
+                                            str(total_iter)+'_face_photo.jpg', 4), caption="str(total_iter)+'_face_result")]
+                    wandb.log("petrain example":[wandb.Image(utils.write_batch_image(result_scenery, args.save_dir+'/images', 
+                                            str(total_iter)+'_scenery_result.jpg', 4), caption="str(total_iter)+'_face_result")]
+                    wandb.log("petrain example":[wandb.Image(utils.write_batch_image(photo_scenery, args.save_dir+'/images', 
+                                            str(total_iter)+'_scenery_photo.jpg', 4), caption="str(total_iter)+'_face_result")]
 
-                    utils.write_batch_image(result_scenery, args.save_dir+'/images', 
-                                            str(total_iter)+'_scenery_result.jpg', 4)
-                    utils.write_batch_image(photo_scenery, args.save_dir+'/images', 
-                                            str(total_iter)+'_scenery_photo.jpg', 4)
 
             
 if __name__ == '__main__':

@@ -87,6 +87,7 @@ def train(args):
                 wandb.log({"r_loss":r_loss,"iteration":total_iter})
                 print('pretrain, iter: {}, recon_loss: {}'.format(total_iter, r_loss))
                 if np.mod(total_iter+1, 500 ) == 0:
+                    
                     saver.save(sess, args.save_dir+'save_models/model', 
                                write_meta_graph=False, global_step=total_iter)
                      
@@ -97,14 +98,17 @@ def train(args):
                    
                     result_scenery = sess.run(output, feed_dict={input_photo: photo_scenery})
 
-                    utils.write_batch_image(result_face, args.save_dir+'/images', 
-                                            str(total_iter)+'_face_result.jpg', 4)
-                    utils.write_batch_image(photo_face, args.save_dir+'/images', 
-                                            str(total_iter)+'_face_photo.jpg', 4)
-                    utils.write_batch_image(result_scenery, args.save_dir+'/images', 
-                                            str(total_iter)+'_scenery_result.jpg', 4)
-                    utils.write_batch_image(photo_scenery, args.save_dir+'/images', 
-                                            str(total_iter)+'_scenery_photo.jpg', 4)
+                    wandb.log("petrain example":[wandb.Image(utils.write_batch_image(result_face, args.save_dir+'/images', 
+                                            str(total_iter)+'_face_result.jpg', 4), caption="str(total_iter)+'_face_result")]
+                    wandb.log("petrain example":[wandb.Image(utils.write_batch_image(photo_face, args.save_dir+'/images', 
+                                            str(total_iter)+'_face_photo.jpg', 4), caption="str(total_iter)+'_face_result")]
+                    wandb.log("petrain example":[wandb.Image(utils.write_batch_image(result_scenery, args.save_dir+'/images', 
+                                            str(total_iter)+'_scenery_result.jpg', 4), caption="str(total_iter)+'_face_result")]
+                    wandb.log("petrain example":[wandb.Image(utils.write_batch_image(photo_scenery, args.save_dir+'/images', 
+                                            str(total_iter)+'_scenery_photo.jpg', 4), caption="str(total_iter)+'_face_result")]
+
+        
+    wandb.tensorflow.log(tf.summary.merge_all())
 
                     
 
