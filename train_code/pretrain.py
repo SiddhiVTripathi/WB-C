@@ -15,6 +15,7 @@ import numpy as np
 import argparse
 import network 
 from tqdm import tqdm
+from random import sample
 
 
 os.environ["CUDA_VISIBLE_DEVICES"]="0"
@@ -24,7 +25,7 @@ def arg_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument("--patch_size", default = 256, type = int)
     parser.add_argument("--batch_size", default = 16, type = int)     
-    parser.add_argument("--total_iter", default = 50000, type = int)
+    parser.add_argument("--total_iter", default = 10000, type = int)
     parser.add_argument("--adv_train_lr", default = 2e-4, type = float)
     parser.add_argument("--gpu_fraction", default = 0.5, type = float)
     parser.add_argument("--save_dir", default = 'pretrain')
@@ -68,9 +69,9 @@ def train(args):
 
         sess.run(tf.compat.v1.global_variables_initializer())
         face_photo_dir = 'dataset/face_photo'
-        face_photo_list = utils.load_image_list(face_photo_dir)
+        face_photo_list = sample(utils.load_image_list(face_photo_dir),3000)
         scenery_photo_dir = 'dataset/scenery_photo'
-        scenery_photo_list = utils.load_image_list(scenery_photo_dir)
+        scenery_photo_list = sample(utils.load_image_list(scenery_photo_dir),3000)
 
 
         for total_iter in tqdm(range(args.total_iter)):
