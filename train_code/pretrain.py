@@ -99,17 +99,17 @@ def train(args):
                    
                     result_scenery = sess.run(output, feed_dict={input_photo: photo_scenery})
 
-                    wandb.log({"pretrain result face":[wandb.Image(utils.write_batch_image(result_face, args.save_dir+'/images', 
-                                            str(total_iter)+'_face_result.jpg', 4), caption=str(total_iter)+'_face_result')]})
-                    wandb.log({"pretrain example face":[wandb.Image(utils.write_batch_image(photo_face, args.save_dir+'/images', 
-                                            str(total_iter)+'_face_photo.jpg', 4), caption=str(total_iter)+'_face_photo')]})
-                    wandb.log({"pretrain result scenery":[wandb.Image(utils.write_batch_image(result_scenery, args.save_dir+'/images', 
-                                            str(total_iter)+'_scenery_result.jpg', 4), caption=str(total_iter)+'_scenery_result')]})
-                    wandb.log({"pretrain example scenery":[wandb.Image(utils.write_batch_image(photo_scenery, args.save_dir+'/images', 
-                                            str(total_iter)+'_scenery_photo.jpg', 4), caption=str(total_iter)+'_scenery_photo')]})
+                    wandb.Image(utils.write_batch_image(result_face, args.save_dir+'/images', 
+                                            str(total_iter)+'_face_result.jpg', 4), caption=str(total_iter)+'_face_result')
+                    wandb.Image(utils.write_batch_image(photo_face, args.save_dir+'/images', 
+                                            str(total_iter)+'_face_photo.jpg', 4), caption=str(total_iter)+'_face_photo')
+                    wandb.Image(utils.write_batch_image(result_scenery, args.save_dir+'/images', 
+                                            str(total_iter)+'_scenery_result.jpg', 4), caption=str(total_iter)+'_scenery_result')
+                    wandb.Image(utils.write_batch_image(photo_scenery, args.save_dir+'/images', 
+                                            str(total_iter)+'_scenery_photo.jpg', 4), caption=str(total_iter)+'_scenery_photo')
 
         
-    wandb.tensorflow.log(tf.summary.merge_all())
+    wandb.tensorflow.log(tf.compat.v1.summary.merge_all())
 
                     
 
