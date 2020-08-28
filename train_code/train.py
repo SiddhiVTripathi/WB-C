@@ -14,10 +14,10 @@ import numpy as np
 import argparse
 import network 
 import loss
-
+import random
 from tqdm import tqdm
 from guided_filter import guided_filter
-
+random.seed(0)
 os.environ["CUDA_VISIBLE_DEVICES"]="0"
 wandb.init(project="white-box-cartoonization", sync_tensorboard=True)
 
@@ -118,17 +118,17 @@ def train(args):
     with tf.device('/device:GPU:0'):
 
         sess.run(tf.compat.v1.global_variables_initializer())
-        saver.restore(sess, tf.train.latest_checkpoint('pretrain/saved_models'))
+        saver.restore(sess, tf.train.latest_checkpoint('pretrainsave_models'))
 
         face_photo_dir = 'dataset/face_photo'
-        face_photo_list = utils.load_image_list(face_photo_dir)
+        face_photo_list = random.sample(utils.load_image_list(face_photo_dir),3000)
         scenery_photo_dir = 'dataset/scenery_photo'
-        scenery_photo_list = utils.load_image_list(scenery_photo_dir)
+        scenery_photo_list = random.sample(utils.load_image_list(scenery_photo_dir),3000)
 
         face_cartoon_dir = 'dataset/face_cartoon'
-        face_cartoon_list = utils.load_image_list(face_cartoon_dir)
+        face_cartoon_list = random.sample(utils.load_image_list(face_cartoon_dir),3000)
         scenery_cartoon_dir = 'dataset/scenery_cartoon'
-        scenery_cartoon_list = utils.load_image_list(scenery_cartoon_dir)
+        scenery_cartoon_list = random.sample(utils.load_image_list(scenery_cartoon_dir),3000)
 
         for total_iter in tqdm(range(args.total_iter)):
 
@@ -172,7 +172,7 @@ def train(args):
 
                 print('Iter: {}, d_loss: {}, g_loss: {}, recon_loss: {}'.\
                         format(total_iter, d_loss, g_loss, r_loss))
-             wandb.log({"training d_loss":d_loss,
+                wandb.log({"training d_loss":d_loss,
                        "training g_loss":g_loss,
                         "training r_loss":r_loss,
                         "training iteration":total_iter})
@@ -194,14 +194,14 @@ def train(args):
                                                                 input_superpixel: photo_scenery,
                                                                 input_cartoon: cartoon_scenery})
 
-                    wandb.log({"train result face":[wandb.Image(utils.write_batch_image(result_face, args.save_dir+'/images', 
-                                            str(total_iter)+'_face_result.jpg', 4), caption=str(total_iter)+'_face_result')]})
-                    wandb.log({"train example face":[wandb.Image(utils.write_batch_image(photo_face, args.save_dir+'/images', 
-                                            str(total_iter)+'_face_photo.jpg', 4), caption=str(total_iter)+'_face_photo')]})
-                    wandb.log({"train result scenery":[wandb.Image(utils.write_batch_image(result_scenery, args.save_dir+'/images', 
-                                            str(total_iter)+'_scenery_result.jpg', 4), caption=str(total_iter)+'_scenery_result')]})
-                    wandb.log({"train example scenery":[wandb.Image(utils.write_batch_image(photo_scenery, args.save_dir+'/images', 
-                                            str(total_iter)+'_scenery_photo.jpg', 4), caption=str(total_iter)+'_scenery_photo')]})
+                    wandb.Image(utils.write_batch_image(result_face, args.save_dir+'/images', 
+                                            str(total_iter)+'_face_result.jpg', 4), caption=str(total_iter)+'_face_result')
+                    wandb.Image(utils.write_batch_image(photo_face, args.save_dir+'/images', 
+                                            str(total_iter)+'_face_photo.jpg', 4), caption=str(total_iter)+'_face_photo')
+                    wandb.Image(utils.write_batch_image(result_scenery, args.save_dir+'/images', 
+                                            str(total_iter)+'_scenery_result.jpg', 4), caption=str(total_iter)+'_scenery_result')
+                    wandb.Image(utils.write_batch_image(photo_scenery, args.save_dir+'/images', 
+                                            str(total_iter)+'_scenery_photo.jpg', 4), caption=str(total_iter)+'_scenery_photo')
 
 
             
