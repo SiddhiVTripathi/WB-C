@@ -203,7 +203,7 @@ def train(args):
                     wandb.Image(utils.write_batch_image(photo_scenery, args.save_dir+'/images', 
                                             str(total_iter)+'_scenery_photo.jpg', 4), caption=str(total_iter)+'_scenery_photo')
 
-
+    wandb.tensorflow.log(tf.compat.v1.summary.merge_all())
             
 if __name__ == '__main__':
     
