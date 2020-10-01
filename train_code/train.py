@@ -20,7 +20,7 @@ from guided_filter import guided_filter
 random.seed(0)
 os.environ["CUDA_VISIBLE_DEVICES"]="0"
 wandb.init(project="white-box-cartoonization", sync_tensorboard=True)
-
+tf.compat.v1.disable_eager_execution()
 def arg_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument("--patch_size", default = 256, type = int)
