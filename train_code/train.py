@@ -61,7 +61,7 @@ def train(args):
                                              scale=1, patch=True, name='disc_blur')
 
 
-    vgg_model = loss.Vgg19('vgg19_no_fc.npy')
+    vgg_model = loss.Vgg19('train_code/vgg19_no_fc.npy')
     vgg_photo = vgg_model.build_conv4_4(input_photo)
     vgg_output = vgg_model.build_conv4_4(output)
     vgg_superpixel = vgg_model.build_conv4_4(input_superpixel)
@@ -120,18 +120,18 @@ def train(args):
         saver.restore(sess, tf.train.latest_checkpoint('pretrainsave_models'))
 
         face_photo_dir = 'dataset/face_photo'
-        face_photo_list = random.sample(utils.load_image_list(face_photo_dir),3000)
+        face_photo_list = utils.load_image_list(face_photo_dir)
         scenery_photo_dir = 'dataset/scenery_photo'
-        scenery_photo_list = random.sample(utils.load_image_list(scenery_photo_dir),3000)
+        scenery_photo_list = utils.load_image_list(scenery_photo_dir)
 
         face_cartoon_dir_kyoto_face = 'dataset/face_cartoon/kyoto_face/'
-        face_cartoon_list = random.sample(utils.load_image_list(face_cartoon_dir_kyoto_face),1500)
+        face_cartoon_list = utils.load_image_list(face_cartoon_dir_kyoto_face)
         face_cartoon_dir_pa_face = 'dataset/face_cartoon/pa_face/'
-        face_cartoon_list.extend(random.sample(utils.load_image_list(face_cartoon_dir_pa_face),1500))
+        face_cartoon_list.extend(utils.load_image_list(face_cartoon_dir_pa_face))
         scenery_cartoon_dir = 'dataset/scenery_cartoon/'
-        scenery_cartoon_list = random.sample(utils.load_image_list(scenery_cartoon_dir+"hayao/"),3300)
-        scenery_cartoon_list.extend(random.sample(utils.load_image_list(scenery_cartoon_dir+"hosoda/"),2600))
-        scenery_cartoon_list = random.sample(utils.load_image_list(scenery_cartoon_dir+"shinkai/"),3000)
+        scenery_cartoon_list = utils.load_image_list(scenery_cartoon_dir+"hayao/")
+        scenery_cartoon_list.extend(utils.load_image_list(scenery_cartoon_dir+"hosoda/"))
+        scenery_cartoon_list = utils.load_image_list(scenery_cartoon_dir+"shinkai/")
 
         for total_iter in tqdm(range(args.total_iter)):
 
@@ -175,10 +175,6 @@ def train(args):
 
                 print('Iter: {}, d_loss: {}, g_loss: {}, recon_loss: {}'.\
                         format(total_iter, d_loss, g_loss, r_loss))
-                wandb.log({"training d_loss":d_loss,
-                       "training g_loss":g_loss,
-                        "training r_loss":r_loss,
-                        "training iteration":total_iter})
                 if np.mod(total_iter+1, 250 ) == 0:
                     saver.save(sess, args.save_dir+'/saved_models/model', 
                                write_meta_graph=False, global_step=total_iter)
@@ -198,15 +194,15 @@ def train(args):
                                                                 input_superpixel: photo_scenery,
                                                                 input_cartoon: cartoon_scenery})
 
-                    wandb.Image(utils.write_batch_image(result_face, args.save_dir+'/images', 
-                                            str(total_iter)+'_face_result.jpg', 4), caption=str(total_iter)+'_face_result')
-                    wandb.Image(utils.write_batch_image(photo_face, args.save_dir+'/images', 
-                                            str(total_iter)+'_face_photo.jpg', 4), caption=str(total_iter)+'_face_photo')
-                    wandb.Image(utils.write_batch_image(result_scenery, args.save_dir+'/images', 
-                                            str(total_iter)+'_scenery_result.jpg', 4), caption=str(total_iter)+'_scenery_result')
-                    wandb.Image(utils.write_batch_image(photo_scenery, args.save_dir+'/images', 
-                                            str(total_iter)+'_scenery_photo.jpg', 4), caption=str(total_iter)+'_scenery_photo')
-    wandb.tensorflow.log(tf.compat.v1.summary.merge_all())
+                    utils.write_batch_image(result_face, args.save_dir+'/images', 
+                                            str(total_iter)+'_face_result.jpg', 4)
+                    utils.write_batch_image(photo_face, args.save_dir+'/images', 
+                                            str(total_iter)+'_face_photo.jpg', 4)
+                    utils.write_batch_image(result_scenery, args.save_dir+'/images', 
+                                            str(total_iter)+'_scenery_result.jpg', 4)
+                    utils.write_batch_image(photo_scenery, args.save_dir+'/images', 
+                                            str(total_iter)+'_scenery_photo.jpg', 4)
+
 
             
 if __name__ == '__main__':
