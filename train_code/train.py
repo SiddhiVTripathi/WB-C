@@ -7,7 +7,6 @@ by Xinrui Wang and Jinze yu
 
 import tensorflow as tf
 import tf_slim as slim
-import wandb
 import utils
 import os
 import numpy as np
@@ -19,13 +18,13 @@ from tqdm import tqdm
 from guided_filter import guided_filter
 random.seed(0)
 os.environ["CUDA_VISIBLE_DEVICES"]="0"
-wandb.init(project="white-box-cartoonization", sync_tensorboard=True)
+
 tf.compat.v1.disable_eager_execution()
 def arg_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument("--patch_size", default = 256, type = int)
     parser.add_argument("--batch_size", default = 16, type = int)     
-    parser.add_argument("--total_iter", default = 75000, type = int)
+    parser.add_argument("--total_iter", default = 100000, type = int)
     parser.add_argument("--adv_train_lr", default = 2e-4, type = float)
     parser.add_argument("--gpu_fraction", default = 0.5, type = float)
     parser.add_argument("--save_dir", default = 'train_cartoon', type = str)
