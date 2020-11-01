@@ -8,24 +8,21 @@ by Xinrui Wang and Jinze yu
 
 import tensorflow as tf
 import tf_slim as slim
-import wandb
 import utils
 import os
 import numpy as np
 import argparse
 import network 
 from tqdm import tqdm
-from random import sample
 
 
 os.environ["CUDA_VISIBLE_DEVICES"]="0"
-wandb.init(project="white-box-cartoonization", sync_tensorboard=True)
 
 def arg_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument("--patch_size", default = 256, type = int)
     parser.add_argument("--batch_size", default = 16, type = int)     
-    parser.add_argument("--total_iter", default = 10000, type = int)
+    parser.add_argument("--total_iter", default = 50000, type = int)
     parser.add_argument("--adv_train_lr", default = 2e-4, type = float)
     parser.add_argument("--gpu_fraction", default = 0.5, type = float)
     parser.add_argument("--save_dir", default = 'pretrain')
@@ -69,9 +66,9 @@ def train(args):
 
         sess.run(tf.compat.v1.global_variables_initializer())
         face_photo_dir = 'dataset/face_photo'
-        face_photo_list = sample(utils.load_image_list(face_photo_dir),3000)
+        utils.load_image_list(face_photo_dir)
         scenery_photo_dir = 'dataset/scenery_photo'
-        scenery_photo_list = sample(utils.load_image_list(scenery_photo_dir),3000)
+        utils.load_image_list(scenery_photo_dir)
 
 
         for total_iter in tqdm(range(args.total_iter)):
@@ -99,17 +96,15 @@ def train(args):
                    
                     result_scenery = sess.run(output, feed_dict={input_photo: photo_scenery})
 
-                    wandb.Image(utils.write_batch_image(result_face, args.save_dir+'/images', 
-                                            str(total_iter)+'_face_result.jpg', 4), caption=str(total_iter)+'_face_result')
-                    wandb.Image(utils.write_batch_image(photo_face, args.save_dir+'/images', 
-                                            str(total_iter)+'_face_photo.jpg', 4), caption=str(total_iter)+'_face_photo')
-                    wandb.Image(utils.write_batch_image(result_scenery, args.save_dir+'/images', 
-                                            str(total_iter)+'_scenery_result.jpg', 4), caption=str(total_iter)+'_scenery_result')
-                    wandb.Image(utils.write_batch_image(photo_scenery, args.save_dir+'/images', 
-                                            str(total_iter)+'_scenery_photo.jpg', 4), caption=str(total_iter)+'_scenery_photo')
-
+                    utils.write_batch_image(result_face, args.save_dir+'/images', 
+                                            str(total_iter)+'_face_result.jpg', 4)
+                    utils.write_batch_image(photo_face, args.save_dir+'/images', 
+                                            str(total_iter)+'_face_photo.jpg', 4)
+                    utils.write_batch_image(result_scenery, args.save_dir+'/images', 
+                                            str(total_iter)+'_scenery_result.jpg', 4)
+                    utils.write_batch_image(photo_scenery, args.save_dir+'/images', 
+                                            str(total_iter)+'_scenery_photo.jpg', 4)
         
-    wandb.tensorflow.log(tf.compat.v1.summary.merge_all())
 
                     
 
